@@ -1,7 +1,15 @@
 <template>
 
 	<div id="dashboard">
-		<h3>Dashboard</h3>
+
+		<ul class="collection with-header">
+			<li class="collection-header"><h4>Employees</h4>
+			</li>
+			<li v-for='employee in employees' v-bind:key='employees.id' class="collectio-item">
+				{{employee.Name}}
+			</li>
+		</ul>
+
 		<div class="fixed-action-btn">
 			<router-link to="/new" class="btn-floating btn-large red">
 				<i class="fa fa-plus"></i>
@@ -21,12 +29,20 @@
 			}
 		},
 		created () {
-			db.collection('employees').get().then
+			db.collection('Employees').get().then
 			(querySnapshot => {
 				querySnapshot.forEach(doc => {
-					console.log(doc);
+					console.log(doc.data());
+					const data = {
+						'id': doc.id,
+						'employee_id': doc.data().employee_id,
+						'name': doc.data().Name,
+						'dept': doc.data().Dept,
+						'position': doc.data().Position,
+					}
+					this.employees.push(data)
 					
-			})
+				})
 			})
 		}
 	}
