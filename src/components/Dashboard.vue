@@ -3,10 +3,14 @@
 	<div id="dashboard">
 
 		<ul class="collection with-header">
-			<li class="collection-header"><h4>Employees</h4>
+			<li class="collection-header"><h4>Dashboard</h4>
 			</li>
-			<li v-for='employee in employees' v-bind:key='employees.id' class="collectio-item">
-				{{employee.Name}}
+			<li v-for='employee in employees' v-bind:key="employees.id" class="collection-item">
+				<div class="chip">{{employee.dept}}</div>{{employee.employee_id}}:{{employee.name}}
+
+				<router-link class="secondary-content" :to="{name:'view-employee', params: {employee_id:  employee.employee_id}}">
+					<i class="fa fa-eye"></i>
+				</router-link>
 			</li>
 		</ul>
 
@@ -29,10 +33,9 @@
 			}
 		},
 		created () {
-			db.collection('Employees').get().then
+			db.collection('Employees').orderBy('Dept').get().then
 			(querySnapshot => {
 				querySnapshot.forEach(doc => {
-					console.log(doc.data());
 					const data = {
 						'id': doc.id,
 						'employee_id': doc.data().employee_id,
